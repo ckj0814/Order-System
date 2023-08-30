@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: ruyuan-eshop-gateway
+  profiles:
+    active: local
+  cloud:
+    nacos:
+      config:
+        shared-configs:
+          - data-id: ruyuan-eshop-common-${spring.profiles.active}.yaml
+            group: DEFAULT_GROUP
+            refresh: true
+        server-addr: localhost:8848
+        file-extension: yaml
+        username: nacos
+        password: nacos

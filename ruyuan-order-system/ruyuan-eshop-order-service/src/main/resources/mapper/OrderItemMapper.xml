@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruyuan.eshop.order.mapper.OrderItemMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ruyuan.eshop.order.domain.entity.OrderItemDO">
+        <id column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="order_item_id" property="orderItemId"/>
+        <result column="product_type" property="productType"/>
+        <result column="product_id" property="productId"/>
+        <result column="product_img" property="productImg"/>
+        <result column="product_name" property="productName"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sale_quantity" property="saleQuantity"/>
+        <result column="sale_price" property="salePrice"/>
+        <result column="origin_amount" property="originAmount"/>
+        <result column="pay_amount" property="payAmount"/>
+        <result column="product_unit" property="productUnit"/>
+        <result column="purchase_price" property="purchasePrice"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , order_id, order_item_id, product_type, product_id, product_img, product_name, sku_code, sale_quantity, sale_price, origin_amount, pay_amount, product_unit, purchase_price, gmt_create, gmt_modified
+    </sql>
+
+</mapper>

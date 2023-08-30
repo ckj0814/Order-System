@@ -1,0 +1,970 @@
+{
+	"info": {
+		"_postman_id": "256aaa09-da9d-4ef4-95c0-0d5152fca7bc",
+		"name": "订单系统接口清单",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "正向下单",
+			"item": [
+				{
+					"name": "生成新的订单号",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessIdentifier\":1,\n    \"userId\":100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/genOrderId",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"genOrderId"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "生成新的订单号-压测",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessIdentifier\":1,\n    \"userId\":100\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/genOrderId",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"genOrderId"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "提交订单",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\":1021121732891264100,\n    \"businessIdentifier\":1,\n    \"openid\":null,\n    \"userId\":100,\n    \"orderType\":1,\n    \"sellerId\":101,\n    \"userRemark\":\"test reamark\",\n    \"deliveryType\":1,\n    \"province\":\"110000\",\n    \"city\":\"110100\",\n    \"area\":\"110105\",\n    \"street\":\"110101007\",\n    \"detailAddress\":\"北京路10号\",\n    \"lon\":100.10000,\n    \"lat\":1010.201010,\n    \"receiverName\":\"张三\",\n    \"receiverPhone\":\"13434545545\",\n    \"userAddressId\":\"1010\",\n    \"addressCode\":\"1010100\",\n    \"regionId\":\"10002020\",\n    \"shippingAreaId\":\"101010212\",\n    \"clientIp\":\"34.53.12.34\",\n    \"deviceId\":\"45sf2354adfw245\",\n    \"orderItemRequestList\":[\n        {\n            \"productType\":1,\n            \"saleQuantity\":10,\n            \"skuCode\":\"skuCode001\"\n        }\n    ],\n    \"orderAmountRequestList\":[\n        {\n            \"amountType\":10,\n            \"amount\":10000\n        },\n        {\n            \"amountType\":30,\n            \"amount\":0\n        },\n        {\n            \"amountType\":50,\n            \"amount\":10000\n        }\n    ],\n    \"paymentRequestList\":[\n        {\n            \"payType\":10,\n            \"accountType\":1\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/createOrder",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"createOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "订单预支付",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userId\":\"100\",\n    \"businessIdentifier\":1,\n    \"payType\":10,\n    \"orderId\":\"1021121537167617100\",\n    \"payAmount\":\"10100\",\n    \"callbackUrl\":\"http://pay.ruyuan.com/order/callbackUrl\",\n    \"callbackFailUrl\":\"http://pay.ruyuan.com/order/callbackFailUrl\",\n    \"openid\":null,\n    \"subject\":\"新鲜水果\",\n    \"itemInfo\":\"test\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/prePayOrder",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"prePayOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "模拟订单支付回调",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\":\"1021120632909569100\",\n    \"payAccount\":\"demopay@qq.com\",\n    \"payAmount\":\"9600\",\n    \"outTradeNo\":\"0360406257224885731\",\n    \"payType\":10,\n    \"merchantId\":\"43523123122343\",\n    \"payChannel\":\"WeChatPay\",\n    \"appid\":\"wx207d34495e348e0c\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/payCallback",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"payCallback"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询订单列表",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessIdentifier\":1,\n    \"userIds\":[\"100\"],\n    \"orderIds\":[\"1021120632909569100\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/listOrders",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"listOrders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "查询订单详情",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "localhost:8005/order/test/orderDetail?orderId=1021120632909569100",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"orderDetail"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "1021120632909569100"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "模拟触发订单发货出库",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"orderId\":\"1021120632907792100\",\n        \"outStockTime\":\"2021-12-06 00:00:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/triggerOutStockEvent",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"triggerOutStockEvent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "模拟触发订单开始物流配送",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"orderId\":\"1021120632909569100\",\n        \"delivererNo\":\"1032\",\n        \"delivererName\":\"张三\",\n        \"delivererPhone\":\"13432434456\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/triggerDeliveredWmsEvent",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"triggerDeliveredWmsEvent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "触发订单签收事件",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\":\"1021120632907792100\",\n    \"signedTime\":\"2021-12-06 10:00:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/triggerDeliveredWmsEvent",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"triggerDeliveredWmsEvent"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "超时未支付取消订单",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"orderId\": \"1021120632907777100\",\r\n  \"businessIdentifier\": 1,\r\n  \"cancelType\": 1,\r\n  \"userId\": \"100\",\r\n  \"orderType\": 1,\r\n  \"orderStatus\": 10\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8005/afterSale/cancelOrder",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"afterSale",
+								"cancelOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "删除订单",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderIds\":[\"1021120632907777100\"]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/removeOrders",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"removeOrders"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "修改订单收货地址",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\":\"1021120632909825100\",\n    \"province\":\"310000\",\n    \"city\":\"310100\",\n    \"area\":\"310101\",\n    \"street\":\"310101002\",\n    \"detailAddress\":\"清海路101号\",\n    \"lon\":100.16432165234,\n    \"lat\":1010.2010100000\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/order/test/adjustDeliveryAddress",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"adjustDeliveryAddress"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "触发接收订单履约",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}:8005/order/test/triggerReceiveOrderFulFill?orderId=1011250000000010000",
+							"host": [
+								"{{host}}"
+							],
+							"port": "8005",
+							"path": [
+								"order",
+								"test",
+								"triggerReceiveOrderFulFill"
+							],
+							"query": [
+								{
+									"key": "orderId",
+									"value": "1011250000000010000"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "逆向售后",
+			"item": [
+				{
+					"name": "手动取消订单 已支付",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"orderId\": \"1021120232958721100\",\r\n  \"businessIdentifier\": 1,\r\n  \"cancelType\": 0,\r\n  \"userId\": \"100\",\r\n  \"orderType\": 1,\r\n  \"orderStatus\": 20\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8005/afterSale/cancelOrder",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"afterSale",
+								"cancelOrder"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "支付退款回调 成功",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"orderId\": \"1021120232958721100\",\r\n  \"afterSaleId\":\"2021120232893313100\",\r\n  \"batchNo\": \"10211202329587211003023480626\",\r\n  \"refundStatus\": 20,\r\n  \"refundFee\": 9600,\r\n  \"totalFee\": 9600,\r\n  \"sign\": \"sign\",\r\n  \"tradeNo\": \"5444744505515600486\",\r\n  \"refundTime\": \"2021-12-02 07:07:07\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8006/pay/refundCallback",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8006",
+							"path": [
+								"pay",
+								"refundCallback"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "支付退款回调 失败",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"orderId\": \"1021120232958721100\",\r\n  \"afterSaleId\":\"2021120232893313100\",\r\n  \"batchNo\": \"10211202329587211003023480626\",\r\n  \"refundStatus\": 30,\r\n  \"refundFee\": 9600,\r\n  \"totalFee\": 9600,\r\n  \"sign\": \"sign\",\r\n  \"tradeNo\": \"5444744505515600486\",\r\n  \"refundTime\": \"2021-12-02 07:07:07\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8006/pay/refundCallback",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8006",
+							"path": [
+								"pay",
+								"refundCallback"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "手动售后退货",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"orderId\": \"1021120232958721100\",\r\n  \"businessIdentifier\": 1,\r\n  \"userId\": \"100\",\r\n  \"returnGoodsCode\": 0,\r\n  \"returnGoodsDesc\": \"要退货\",\r\n  \"skuCode\": \"10101010\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8005/afterSale/applyAfterSale",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"afterSale",
+								"applyAfterSale"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "客服审核通过 发起退款",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"afterSaleId\": 2021120232891521100,\r\n  \"customerId\": \"123456\",\r\n  \"auditResult\": 1,\r\n  \"afterSaleRefundId\": 7,\r\n  \"orderId\": \"1021120232958721100\",\r\n  \"auditResultDesc\":\"测试前台发来的客服审核通过\"\r\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8011/customer/audit",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8011",
+							"path": [
+								"customer",
+								"audit"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "缺品请求",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"orderId\":\"1011250000000010000\",\n  \"userId\":\"110\",\n  \"lackItems\":[\n      {\n          \"skuCode\":\"10101010\",\n          \"lackNum\":1\n      }\n  ]  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8005/afterSale/lockItem",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"afterSale",
+								"lockItem"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "用户撤销售后申请",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"afterSaleId\":2021112837104128002\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8005/afterSale/revokeAfterSale",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"afterSale",
+								"revokeAfterSale"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "售后列表查询",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"businessIdentifier\":1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8005/afterSale/listAfterSales",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"afterSale",
+								"listAfterSales"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "售后详情",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8005/afterSale/afterSaleDetail?afterSaleId=2011240000000016234",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8005",
+							"path": [
+								"afterSale",
+								"afterSaleDetail"
+							],
+							"query": [
+								{
+									"key": "afterSaleId",
+									"value": "2011240000000016234"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "库存服务接口",
+			"item": [
+				{
+					"name": "新增商品库存",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"skuCode\":\"test002\",\n    \"saleStockQuantity\":\"100\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8001/inventory/addProductStock",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"inventory",
+								"addProductStock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "扣商品库存",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\":\"orderId001\",\n    \"orderItemRequestList\":[\n        {\n            \"saleQuantity\":10,\n            \"skuCode\":\"10101010\"\n        },\n        {\n            \"saleQuantity\":1,\n            \"skuCode\":\"10101011\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8001/inventory/deductProductStock",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"inventory",
+								"deductProductStock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取库存信息",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\":\"orderId001\",\n    \"orderItemRequestList\":[\n        {\n            \"saleQuantity\":10,\n            \"skuCode\":\"10101010\"\n        },\n        {\n            \"saleQuantity\":1,\n            \"skuCode\":\"10101011\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8001/inventory/getStockInfo?skuCode=skuCode002",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"inventory",
+								"getStockInfo"
+							],
+							"query": [
+								{
+									"key": "skuCode",
+									"value": "skuCode002"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "获取库存信息-压测",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"orderId\":\"orderId001\",\n    \"orderItemRequestList\":[\n        {\n            \"saleQuantity\":10,\n            \"skuCode\":\"10101010\"\n        },\n        {\n            \"saleQuantity\":1,\n            \"skuCode\":\"10101011\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "106.15.191.229:8001/inventory/getStockInfo?skuCode=skuCode002",
+							"host": [
+								"106",
+								"15",
+								"191",
+								"229"
+							],
+							"port": "8001",
+							"path": [
+								"inventory",
+								"getStockInfo"
+							],
+							"query": [
+								{
+									"key": "skuCode",
+									"value": "skuCode002"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "新增商品库存-压测",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"skuCode\":\"test002\",\n    \"saleStockQuantity\":\"100\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "106.15.191.229:8001/inventory/addProductStock",
+							"host": [
+								"106",
+								"15",
+								"191",
+								"229"
+							],
+							"port": "8001",
+							"path": [
+								"inventory",
+								"addProductStock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "调整商品库存",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"skuCode\":\"test002\",\n    \"stockIncremental\":\"1\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8001/inventory/modifyProductStock",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"inventory",
+								"modifyProductStock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "同步商品库存",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"skuCode\":\"10101011\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "106.15.191.229:8001/inventory/syncStockToCache",
+							"host": [
+								"106",
+								"15",
+								"191",
+								"229"
+							],
+							"port": "8001",
+							"path": [
+								"inventory",
+								"syncStockToCache"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "初始化压测数据",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"skuCodes\":[\n        \"skuCode1\",\n        \"skuCode2\",\n        \"skuCode3\",\n        \"skuCode4\",\n        \"skuCode5\",\n        \"skuCode6\",\n        \"skuCode7\",\n        \"skuCode8\",\n        \"skuCode9\",\n        \"skuCode10\",\n        \"skuCode11\",\n        \"skuCode12\",\n        \"skuCode13\",\n        \"skuCode14\",\n        \"skuCode15\",\n        \"skuCode16\",\n        \"skuCode17\",\n        \"skuCode18\",\n        \"skuCode19\",\n        \"skuCode20\",\n        \"skuCode21\",\n        \"skuCode22\",\n        \"skuCode23\",\n        \"skuCode24\",\n        \"skuCode25\",\n        \"skuCode26\",\n        \"skuCode27\",\n        \"skuCode28\",\n        \"skuCode29\",\n        \"skuCode30\",\n        \"skuCode31\",\n        \"skuCode32\",\n        \"skuCode33\",\n        \"skuCode34\",\n        \"skuCode35\",\n        \"skuCode36\",\n        \"skuCode37\",\n        \"skuCode38\",\n        \"skuCode39\",\n        \"skuCode40\",\n        \"skuCode41\",\n        \"skuCode42\",\n        \"skuCode43\",\n        \"skuCode44\",\n        \"skuCode45\",\n        \"skuCode46\",\n        \"skuCode47\",\n        \"skuCode48\",\n        \"skuCode49\",\n        \"skuCode50\",\n        \"skuCode51\",\n        \"skuCode52\",\n        \"skuCode53\",\n        \"skuCode54\",\n        \"skuCode55\",\n        \"skuCode56\",\n        \"skuCode57\",\n        \"skuCode58\",\n        \"skuCode59\",\n        \"skuCode60\",\n        \"skuCode61\",\n        \"skuCode62\",\n        \"skuCode63\",\n        \"skuCode64\",\n        \"skuCode65\",\n        \"skuCode66\",\n        \"skuCode67\",\n        \"skuCode68\",\n        \"skuCode69\",\n        \"skuCode70\",\n        \"skuCode71\",\n        \"skuCode72\",\n        \"skuCode73\",\n        \"skuCode74\",\n        \"skuCode75\",\n        \"skuCode76\",\n        \"skuCode77\",\n        \"skuCode78\",\n        \"skuCode79\",\n        \"skuCode80\",\n        \"skuCode81\",\n        \"skuCode82\",\n        \"skuCode83\",\n        \"skuCode84\",\n        \"skuCode85\",\n        \"skuCode86\",\n        \"skuCode87\",\n        \"skuCode88\",\n        \"skuCode89\",\n        \"skuCode90\",\n        \"skuCode91\",\n        \"skuCode92\",\n        \"skuCode93\",\n        \"skuCode94\",\n        \"skuCode95\",\n        \"skuCode96\",\n        \"skuCode97\",\n        \"skuCode98\",\n        \"skuCode99\",\n        \"skuCode100\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:8001/inventory/initMeasureData",
+							"host": [
+								"localhost"
+							],
+							"port": "8001",
+							"path": [
+								"inventory",
+								"initMeasureData"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

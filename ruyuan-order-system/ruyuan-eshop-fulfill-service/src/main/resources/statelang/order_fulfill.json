@@ -1,0 +1,142 @@
+{
+  "Name": "order_fulfill",
+  "Comment": "订单履约流程",
+  "StartState": "FulfillService",
+  "Version": "1.0.0",
+  "States": {
+    "FulfillService": {
+      "Type": "ServiceTask",
+      "ServiceName": "fulfillSagaService",
+      "ServiceMethod": "createFulfillOrder",
+      "CompensateState": "CreateFulfillOrderCompensate",
+      "Next": "ChoiceWmsState",
+      "Input": [
+        "$.[receiveFulfillRequest]"
+      ],
+      "Output": {
+        "CreateFulfillOrderResult": "$.#root"
+      },
+      "Status": {
+        "#root == true": "SU",
+        "#root == false": "FA",
+        "$Exception{java.lang.Throwable}": "UN"
+      },
+      "Catch": [
+        {
+          "Exceptions": [
+            "java.lang.Throwable"
+          ],
+          "Next": "CompensationTrigger"
+        }
+      ]
+    },
+    "ChoiceWmsState": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Expression": "[CreateFulfillOrderResult] == true",
+          "Next": "WmsService"
+        }
+      ],
+      "Default": "Fail"
+    },
+    "WmsService": {
+      "Type": "ServiceTask",
+      "ServiceName": "wmsSageService",
+      "ServiceMethod": "pickGoods",
+      "CompensateState": "WmsPickGoodsCompensate",
+      "Next": "ChoiceTmsState",
+      "Input": [
+        "$.[receiveFulfillRequest]"
+      ],
+      "Output": {
+        "WmsPickGoodsResult": "$.#root"
+      },
+      "Status": {
+        "#root == true": "SU",
+        "#root == false": "FA",
+        "$Exception{java.lang.Throwable}": "UN"
+      },
+      "Catch": [
+        {
+          "Exceptions": [
+            "java.lang.Throwable"
+          ],
+          "Next": "CompensationTrigger"
+        }
+      ]
+    },
+    "ChoiceTmsState": {
+      "Type": "Choice",
+      "Choices": [
+        {
+          "Expression": "[WmsPickGoodsResult] == true",
+          "Next": "TmsService"
+        }
+      ],
+      "Default": "Fail"
+    },
+    "TmsService": {
+      "Type": "ServiceTask",
+      "ServiceName": "tmsSagaService",
+      "ServiceMethod": "sendOut",
+      "CompensateState": "TmsSendOutCompensate",
+      "Input": [
+        "$.[receiveFulfillRequest]"
+      ],
+      "Output": {
+        "TmsSendOutResult": "$.#root"
+      },
+      "Status": {
+        "#root == true": "SU",
+        "#root == false": "FA",
+        "$Exception{java.lang.Throwable}": "UN"
+      },
+      "Catch": [
+        {
+          "Exceptions": [
+            "java.lang.Throwable"
+          ],
+          "Next": "CompensationTrigger"
+        }
+      ],
+      "Next": "Succeed"
+    },
+    "CreateFulfillOrderCompensate": {
+      "Type": "ServiceTask",
+      "ServiceName": "fulfillSagaService",
+      "ServiceMethod": "createFulfillOrderCompensate",
+      "Input": [
+        "$.[receiveFulfillRequest]"
+      ]
+    },
+    "WmsPickGoodsCompensate": {
+      "Type": "ServiceTask",
+      "ServiceName": "wmsSageService",
+      "ServiceMethod": "pickGoodsCompensate",
+      "Input": [
+        "$.[receiveFulfillRequest]"
+      ]
+    },
+    "TmsSendOutCompensate": {
+      "Type": "ServiceTask",
+      "ServiceName": "tmsSagaService",
+      "ServiceMethod": "sendOutCompensate",
+      "Input": [
+        "$.[receiveFulfillRequest]"
+      ]
+    },
+    "CompensationTrigger": {
+      "Type": "CompensationTrigger",
+      "Next": "Fail"
+    },
+    "Succeed": {
+      "Type": "Succeed"
+    },
+    "Fail": {
+      "Type": "Fail",
+      "ErrorCode": "500",
+      "Message": "订单履约异常！！"
+    }
+  }
+}

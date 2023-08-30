@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruyuan.eshop.inventory.mapper.ProductStockMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ruyuan.eshop.inventory.domain.entity.ProductStockDO">
+        <id column="id" property="id"/>
+        <result column="sku_code" property="skuCode"/>
+        <result column="sale_stock_quantity" property="saleStockQuantity"/>
+        <result column="locked_stock_quantity" property="lockedStockQuantity"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , sku_code, sale_stock_quantity, locked_stock_quantity, gmt_create, gmt_modified
+    </sql>
+
+    <!--扣减商品库存-->
+    <update id="deductProductStock">
+
+        update inventory_product_stock
+        set sale_stock_quantity  = sale_stock_quantity - #{saleQuantity},
+            saled_stock_quantity = saled_stock_quantity + #{saleQuantity}
+        where sku_code = #{skuCode}
+          and sale_stock_quantity >= #{saleQuantity}
+
+    </update>
+
+    <!--扣减销售库存-->
+    <update id="deductSaleStock">
+
+        update inventory_product_stock
+        set sale_stock_quantity = sale_stock_quantity - #{saleQuantity}
+        where sku_code = #{skuCode}
+          and sale_stock_quantity >= #{saleQuantity}
+          and sale_stock_quantity = #{originSaleStock}
+
+    </update>
+
+    <!--增加已销售库存-->
+    <update id="increaseSaledStock">
+
+        update inventory_product_stock
+        set saled_stock_quantity = saled_stock_quantity + #{saleQuantity}
+        where sku_code = #{skuCode}
+          and saled_stock_quantity = #{originSaledStock}
+
+    </update>
+
+    <!--还原销售库存-->
+    <update id="restoreSaleStock">
+
+        update inventory_product_stock
+        set sale_stock_quantity = sale_stock_quantity + #{saleQuantity}
+        where sku_code = #{skuCode}
+          and sale_stock_quantity = #{originSaleStock}
+
+    </update>
+
+
+    <!--释放商品库存-->
+    <update id="releaseProductStock">
+
+        update inventory_product_stock
+        set sale_stock_quantity  = sale_stock_quantity + #{saleQuantity},
+            saled_stock_quantity = saled_stock_quantity - #{saleQuantity}
+        where sku_code = #{skuCode}
+          and saled_stock_quantity >= #{saleQuantity}
+
+    </update>
+
+    <!--调整商品库存-->
+    <update id="modifyProductStock">
+
+        update inventory_product_stock
+        set sale_stock_quantity = sale_stock_quantity + #{saleIncremental}
+        where sku_code = #{skuCode}
+          and sale_stock_quantity = #{originSaleQuantity}
+
+    </update>
+
+</mapper>

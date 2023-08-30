@@ -1,0 +1,102 @@
+spring:
+  application:
+    name: ruyuan-eshop-gateway
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+
+    gateway:
+      routes:
+        # 订单服务
+        - id: order-service
+          uri: lb://ruyuan-eshop-order
+          predicates:
+            - Path=/ruyuan-eshop-order/**
+          filters:
+            - StripPrefix=1
+        # 地址服务
+        - id: address-service
+          uri: lb://ruyuan-eshop-address
+          predicates:
+            - Path=/ruyuan-eshop-address/**
+          filters:
+            - StripPrefix=1
+        # 履约服务
+        - id: fulfill-service
+          uri: lb://ruyuan-eshop-fulfill
+          predicates:
+            - Path=/ruyuan-eshop-fulfill/**
+          filters:
+            - StripPrefix=1
+        # 营销服务
+        - id: market-service
+          uri: lb://ruyuan-eshop-market
+          predicates:
+            - Path=/ruyuan-eshop-market/**
+          filters:
+            - StripPrefix=1
+        # 支付服务
+        - id: pay-service
+          uri: lb://ruyuan-eshop-pay
+          predicates:
+            - Path=/ruyuan-eshop-pay/**
+          filters:
+            - StripPrefix=1
+        # 风控服务
+        - id: risk-service
+          uri: lb://ruyuan-eshop-risk
+          predicates:
+            - Path=/ruyuan-eshop-risk/**
+          filters:
+            - StripPrefix=1
+        # 仓储服务
+        - id: wms-service
+          uri: lb://ruyuan-eshop-wms
+          predicates:
+            - Path=/ruyuan-eshop-wms/**
+          filters:
+            - StripPrefix=1
+        # 客服服务
+        - id: customer-service
+          uri: lb://ruyuan-eshop-customer
+          predicates:
+            - Path=/ruyuan-eshop-customer/**
+          filters:
+            - StripPrefix=1
+        # 库存服务
+        - id: inventory-service
+          uri: lb://ruyuan-eshop-inventory
+          predicates:
+            - Path=/ruyuan-eshop-inventory/**
+          filters:
+            - StripPrefix=1
+        # 订单服务
+        - id: order-service
+          uri: lb://ruyuan-eshop-order
+          predicates:
+            - Path=/ruyuan-eshop-order/**
+          filters:
+            - StripPrefix=1
+        # 商品服务
+        - id: product-service
+          uri: lb://ruyuan-eshop-product
+          predicates:
+            - Path=/ruyuan-eshop-product/**
+          filters:
+            - StripPrefix=1
+        # 运输服务
+        - id: tms-service
+          uri: lb://ruyuan-eshop-tms
+          predicates:
+            - Path=/ruyuan-eshop-tms/**
+          filters:
+            - StripPrefix=1
+      discovery:
+        locator:
+          enabled: true
+
+server:
+  port: 9000

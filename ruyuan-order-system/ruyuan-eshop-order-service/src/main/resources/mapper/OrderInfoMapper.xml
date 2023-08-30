@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruyuan.eshop.order.mapper.OrderInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ruyuan.eshop.order.domain.entity.OrderInfoDO">
+        <id column="id" property="id"/>
+        <result column="business_identifier" property="businessIdentifier"/>
+        <result column="order_id" property="orderId"/>
+        <result column="parent_order_id" property="parentOrderId"/>
+        <result column="business_order_id" property="businessOrderId"/>
+        <result column="order_type" property="orderType"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="cancel_type" property="cancelType"/>
+        <result column="cancel_time" property="cancelTime"/>
+        <result column="seller_id" property="sellerId"/>
+        <result column="user_id" property="userId"/>
+        <result column="pay_type" property="payType"/>
+        <result column="total_amount" property="totalAmount"/>
+        <result column="pay_amount" property="payAmount"/>
+        <result column="coupon_id" property="couponId"/>
+        <result column="pay_time" property="payTime"/>
+        <result column="user_remark" property="userRemark"/>
+        <result column="delete_status" property="deleteStatus"/>
+        <result column="comment_status" property="commentStatus"/>
+        <result column="ext_json" property="extJson"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , business_identifier, order_id, parent_order_id, business_order_id, order_type, order_status, cancel_type, cancel_time, seller_id, user_id, pay_type, total_amount, pay_amount, coupon_id, pay_time, cancel_deadline_time, seller_remark, user_remark, user_type, delete_status, comment_status, ext_json, gmt_create, gmt_modified
+    </sql>
+
+
+    <select id="listByPage" parameterType="com.ruyuan.eshop.order.domain.dto.OrderListQueryDTO"
+            resultType="com.ruyuan.eshop.order.domain.dto.OrderListDTO">
+        SELECT
+        o.business_identifier AS businessIdentifier,
+        o.order_id AS orderId,
+        o.business_order_id AS businessOrderId,
+        o.order_type AS orderType,
+        o.order_status AS orderStatus,
+        o.seller_id AS sellerId,
+        o.user_id AS userId,
+        o.pay_type AS payType,
+        o.coupon_id AS couponId,
+        o.pay_time AS payTime,
+        o.pay_amount AS payAmount,
+        o.user_remark AS userRemark,
+        o.comment_status AS commentStatus,
+        item.product_img AS productImg,
+        item.product_name AS productName,
+        item.sku_code AS skuCode,
+        item.sale_quantity AS saleQuantity,
+        item.pay_amount AS skuPayAmount
+        FROM order_info AS o
+        LEFT JOIN order_item AS item ON o.order_id = item.order_id
+        LEFT JOIN order_payment_detail AS pay ON o.order_id = pay.order_id
+        LEFT JOIN order_delivery_detail AS delivery ON o.order_id = delivery.order_id
+        <where>
+            o.delete_status = 0
+            <if test='query.businessIdentifier != null'>
+                AND o.business_identifier = #{query.businessIdentifier}
+            </if>
+            <if test='query.orderTypes != null and query.orderTypes.size !=0'>
+                <foreach collection='query.orderTypes' item='type' open=' AND o.order_type in (' close=')'
+                         separator=','>
+                    #{type}
+                </foreach>
+            </if>
+            <if test='query.orderIds != null and query.orderIds.size !=0'>
+                <foreach collection='query.orderIds' item='orderId' open=' AND o.order_id in (' close=')' separator=','>
+                    #{orderId}
+                </foreach>
+            </if>
+            <if test='query.sellerIds != null and query.sellerIds.size !=0'>
+                <foreach collection='query.sellerIds' item='sellerId' open=' AND o.seller_id in (' close=')'
+                         separator=','>
+                    #{sellerId}
+                </foreach>
+            </if>
+            <if test='query.parentOrderIds != null and query.parentOrderIds.size !=0'>
+                <foreach collection='query.parentOrderIds' item='parentOrderId' open=' AND o.parent_order_id in ('
+                         close=')' separator=','>
+                    #{parentOrderId}
+                </foreach>
+            </if>
+            <if test='query.orderStatus != null and query.orderStatus.size !=0'>
+                <foreach collection='query.orderStatus' item='orderStatus' open=' AND o.order_status in (' close=')'
+                         separator=','>
+                    #{orderStatus}
+                </foreach>
+            </if>
+            <if test='query.userIds != null and query.userIds.size !=0'>
+                <foreach collection='query.userIds' item='userId' open=' AND o.user_id in (' close=')' separator=','>
+                    #{userId}
+                </foreach>
+            </if>
+            <if test='query.receiverPhones != null and query.receiverPhones.size !=0'>
+                <foreach collection='query.receiverPhones' item='receiverPhone' open=' AND delivery.receiver_phone in ('
+                         close=')' separator=','>
+                    #{receiverPhone}
+                </foreach>
+            </if>
+            <if test='query.receiverNames != null and query.receiverNames.size !=0'>
+                <foreach collection='query.receiverNames' item='receiverName' open=' AND delivery.receiver_name in ('
+                         close=')' separator=','>
+                    #{receiverName}
+                </foreach>
+            </if>
+            <if test='query.tradeNos != null and query.tradeNos.size !=0'>
+                <foreach collection='query.tradeNos' item='tradeNo' open=' AND pay.out_trade_no in (' close=')'
+                         separator=','>
+                    #{tradeNo}
+                </foreach>
+            </if>
+            <if test='query.skuCodes != null and query.skuCodes.size !=0'>
+                <foreach collection='query.skuCodes' item='skuCode' open=' AND item.sku_code in (' close=')'
+                         separator=','>
+                    #{skuCode}
+                </foreach>
+            </if>
+            <if test='query.productNames != null and query.productNames.size !=0'>
+                <foreach collection='query.productNames' item='productName' open=' AND item.product_name in (' close=')'
+                         separator=','>
+                    #{productName}
+                </foreach>
+            </if>
+            <if test='query.createdTimeInterval != null and query.createdTimeInterval.left != null'>
+                AND DATE_FORMAT(o.gmt_create,'%Y-%m-%d %H:%i:%S') >=
+                DATE_FORMAT(#{query.createdTimeInterval.left},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.createdTimeInterval != null and query.createdTimeInterval.right != null'>
+                AND DATE_FORMAT(o.gmt_create,'%Y-%m-%d %H:%i:%S') <![CDATA[<=]]>
+                DATE_FORMAT(#{query.createdTimeInterval.right},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.payTimeInterval != null and query.payTimeInterval.left != null'>
+                AND DATE_FORMAT(o.pay_time,'%Y-%m-%d %H:%i:%S') >= DATE_FORMAT(#{query.payTimeInterval.left},'%Y-%m-%d
+                %H:%i:%S')
+            </if>
+            <if test='query.payTimeInterval != null and query.payTimeInterval.right != null'>
+                AND DATE_FORMAT(o.pay_time,'%Y-%m-%d %H:%i:%S') <![CDATA[<=]]>
+                DATE_FORMAT(#{query.payTimeInterval.right},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.payAmountInterval != null and query.payAmountInterval.left != null'>
+                AND o.pay_amount >= #{query.payAmountInterval.left}
+            </if>
+            <if test='query.payAmountInterval != null and query.payAmountInterval.right != null'>
+                AND o.pay_amount <![CDATA[<=]]> #{query.payAmountInterval.right}
+            </if>
+        </where>
+        ORDER BY o.gmt_create DESC
+    </select>
+
+</mapper>

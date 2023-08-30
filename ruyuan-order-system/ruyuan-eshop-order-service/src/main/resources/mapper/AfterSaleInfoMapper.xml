@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruyuan.eshop.order.mapper.AfterSaleInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.ruyuan.eshop.order.domain.entity.AfterSaleInfoDO">
+        <id column="id" property="id"/>
+        <result column="business_identifier" property="businessIdentifier"/>
+        <result column="after_sale_id" property="afterSaleId"/>
+        <result column="order_id" property="orderId"/>
+        <result column="order_source_channel" property="orderSourceChannel"/>
+        <result column="user_id" property="userId"/>
+        <result column="after_sale_status" property="afterSaleStatus"/>
+        <result column="order_type" property="orderType"/>
+        <result column="apply_source" property="applySource"/>
+        <result column="apply_time" property="applyTime"/>
+        <result column="apply_reason_code" property="applyReasonCode"/>
+        <result column="apply_reason" property="applyReason"/>
+        <result column="review_time" property="reviewTime"/>
+        <result column="review_source" property="reviewSource"/>
+        <result column="review_reason_code" property="reviewReasonCode"/>
+        <result column="review_reason" property="reviewReason"/>
+        <result column="after_sale_type" property="afterSaleType"/>
+        <result column="after_sale_type_detail" property="afterSaleTypeDetail"/>
+        <result column="apply_refund_amount" property="applyRefundAmount"/>
+        <result column="real_refund_amount" property="realRefundAmount"/>
+        <result column="remark" property="remark"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        id
+        , business_identifier, after_sale_id, order_id, order_source_channel, user_id, after_sale_status, order_type, apply_source,apply_time, apply_reason_code, apply_reason, review_time, review_source, review_reason_code, review_reason, after_sale_type, after_sale_type_detail, apply_refund_amount, real_refund_amount, remark,gmt_create, gmt_modified
+    </sql>
+
+    <select id="listByPage" parameterType="com.ruyuan.eshop.order.domain.dto.AfterSaleListQueryDTO"
+            resultType="com.ruyuan.eshop.order.domain.dto.AfterSaleOrderListDTO">
+        SELECT
+        a.after_sale_id AS afterSaleId,
+        a.business_identifier AS businessIdentifier,
+        a.order_id AS orderId,
+        a.order_type AS orderType,
+        a.user_id AS userId,
+        a.after_sale_status AS afterSaleStatus,
+        a.apply_source AS applySource,
+        a.apply_time AS applyTime,
+        a.apply_reason_code AS applyReasonCode,
+        a.apply_reason AS applyReason,
+        a.review_time AS reviewTime,
+        a.review_reason_code AS reviewReasonCode,
+        a.review_reason AS reviewReason,
+        a.remark AS remark,
+        a.after_sale_type AS afterSaleType,
+        a.after_sale_type_detail AS afterSaleTypeDetail,
+        item.product_name AS productName,
+        item.sku_code AS skuCode,
+        item.return_quantity AS returnQuantity,
+        item.product_img AS productImg,
+        item.origin_amount AS originAmount,
+        item.apply_refund_amount AS applyRefundAmount,
+        item.real_refund_amount AS realRefundAmount
+        FROM after_sale_info AS a
+        LEFT JOIN after_sale_item AS item ON a.after_sale_id = item.after_sale_id
+        LEFT JOIN after_sale_refund AS refund ON a.after_sale_id = refund.after_sale_id
+        <where>
+            <if test='query.businessIdentifier != null'>
+                AND a.business_identifier = #{query.businessIdentifier}
+            </if>
+            <if test='query.orderTypes != null and query.orderTypes.size !=0'>
+                <foreach collection='query.orderTypes' item='type' open=' AND a.order_type in (' close=')'
+                         separator=','>
+                    #{type}
+                </foreach>
+            </if>
+            <if test='query.afterSaleStatus != null and query.afterSaleStatus.size !=0'>
+                <foreach collection='query.afterSaleStatus' item='status' open=' AND a.after_sale_status in (' close=')'
+                         separator=','>
+                    #{status}
+                </foreach>
+            </if>
+            <if test='query.applySources != null and query.applySources.size !=0'>
+                <foreach collection='query.applySources' item='applySource' open=' AND a.apply_Source in (' close=')'
+                         separator=','>
+                    #{applySource}
+                </foreach>
+            </if>
+            <if test='query.afterSaleTypes != null and query.afterSaleTypes.size !=0'>
+                <foreach collection='query.afterSaleTypes' item='afterSaleType' open=' AND a.after_sale_type in ('
+                         close=')' separator=','>
+                    #{afterSaleType}
+                </foreach>
+            </if>
+            <if test='query.afterSaleIds != null and query.afterSaleIds.size !=0'>
+                <foreach collection='query.afterSaleIds' item='afterSaleId' open=' AND a.after_sale_id in (' close=')'
+                         separator=','>
+                    #{afterSaleId}
+                </foreach>
+            </if>
+            <if test='query.userIds != null and query.userIds.size !=0'>
+                <foreach collection='query.userIds' item='userId' open=' AND a.user_id in (' close=')' separator=','>
+                    #{userId}
+                </foreach>
+            </if>
+            <if test='query.orderIds != null and query.orderIds.size !=0'>
+                <foreach collection='query.orderIds' item='orderId' open=' AND a.order_id in (' close=')' separator=','>
+                    #{orderId}
+                </foreach>
+            </if>
+            <if test='query.skuCodes != null and query.skuCodes.size !=0'>
+                <foreach collection='query.skuCodes' item='skuCode' open=' AND item.sku_code in (' close=')'
+                         separator=','>
+                    #{skuCode}
+                </foreach>
+            </if>
+            <if test='query.createdTimeInterval != null and query.createdTimeInterval.left != null'>
+                AND DATE_FORMAT(a.gmt_create,'%Y-%m-%d %H:%i:%S') >=
+                DATE_FORMAT(#{query.createdTimeInterval.left},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.createdTimeInterval != null and query.createdTimeInterval.right != null'>
+                AND DATE_FORMAT(a.gmt_create,'%Y-%m-%d %H:%i:%S') <![CDATA[<=]]>
+                DATE_FORMAT(#{query.createdTimeInterval.right},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.applyTimeInterval != null and query.applyTimeInterval.left != null'>
+                AND DATE_FORMAT(a.apply_time,'%Y-%m-%d %H:%i:%S') >=
+                DATE_FORMAT(#{query.applyTimeInterval.left},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.applyTimeInterval != null and query.applyTimeInterval.right != null'>
+                AND DATE_FORMAT(a.apply_time,'%Y-%m-%d %H:%i:%S') <![CDATA[<=]]>
+                DATE_FORMAT(#{query.applyTimeInterval.right},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.reviewTimeInterval != null and query.reviewTimeInterval.left != null'>
+                AND DATE_FORMAT(a.review_time,'%Y-%m-%d %H:%i:%S') >=
+                DATE_FORMAT(#{query.reviewTimeInterval.left},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.reviewTimeInterval != null and query.reviewTimeInterval.right != null'>
+                AND DATE_FORMAT(a.review_time,'%Y-%m-%d %H:%i:%S') <![CDATA[<=]]>
+                DATE_FORMAT(#{query.reviewTimeInterval.right},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.refundPayTimeInterval != null and query.refundPayTimeInterval.left != null'>
+                AND DATE_FORMAT(refund.refund_pay_time,'%Y-%m-%d %H:%i:%S') >=
+                DATE_FORMAT(#{query.refundPayTimeInterval.left},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.refundPayTimeInterval != null and query.reviewTimeInterval.right != null'>
+                AND DATE_FORMAT(refund.refund_pay_time,'%Y-%m-%d %H:%i:%S') <![CDATA[<=]]>
+                DATE_FORMAT(#{query.refundPayTimeInterval.right},'%Y-%m-%d %H:%i:%S')
+            </if>
+            <if test='query.refundAmountInterval != null and query.refundAmountInterval.left != null'>
+                AND refund.refund_amount >= #{query.refundAmountInterval.left}
+            </if>
+            <if test='query.refundAmountInterval != null and query.refundAmountInterval.right != null'>
+                AND refund.refund_amount <![CDATA[<=]]> #{query.refundAmountInterval.right}
+            </if>
+        </where>
+        ORDER BY a.gmt_create DESC
+    </select>
+
+</mapper>

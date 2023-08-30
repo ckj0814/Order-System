@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: ruyuan-eshop-pay
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+
+server:
+  port: 8006
+
+dubbo:
+  scan:
+    base-packages: com.ruyuan.eshop.pay.api
+  registry:
+    address: spring-cloud://localhost
+  protocol:
+    name: dubbo
+    port: 28086
+  consumer:
+    check: false
+  provider:
+    threads: 800
+    actives: 200
+  cloud:
+    subscribed-services: ruyuan-eshop-pay,ruyuan-eshop-order
+
+rocketmq:
+  name-server: localhost:9876

@@ -1,0 +1,59 @@
+spring:
+  application:
+    name: ruyuan-eshop-customer
+  # 数据源配置
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/ruyuan_eshop_customer?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=Asia/Shanghai
+      username: root
+      password: root
+      min-idle: 1
+      initial-size: 1
+      max-active: 5
+      max-wait: 6000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: select 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-open-prepared-statements: 20
+      async-init: true
+      filters: stat
+
+  cloud:
+    nacos:
+      discovery:
+        server-addr: localhost:8848
+        username: nacos
+        password: nacos
+  redis:
+    host: localhost
+    port: 6379
+    password: 123456
+    timeout: 3000
+
+server:
+  port: 8011
+
+dubbo:
+  scan:
+    base-packages: com.ruyuan.eshop.customer.api
+  registry:
+    address: spring-cloud://localhost
+  protocol:
+    name: dubbo
+    port: 28091
+  consumer:
+    check: false
+  provider:
+    threads: 800
+    actives: 200
+  cloud:
+    subscribed-services: ruyuan-eshop-customer,ruyuan-eshop-order
+
+rocketmq:
+  name-server: localhost:9876
